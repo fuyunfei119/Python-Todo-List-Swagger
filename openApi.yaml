@@ -1,0 +1,142 @@
+openapi: 3.0.0
+info:
+  title: Todo List API
+  version: 1.0.0
+servers:
+  - url: http://127.0.0.1:5000
+paths:
+  /todo-list/{list_id}:
+    parameters:
+      - in: path
+        name: list_id
+        required: true
+        schema:
+          type: string
+    get:
+      summary: Get all entries of a Todo List
+      operationId: getTodoList
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TodoList"
+    delete:
+      summary: Delete a complete Todo List with all entries
+      operationId: deleteTodoList
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+    patch:
+      summary: Update the name of an existing Todo List
+      operationId: updateTodoList
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateTodoListRequestBody"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+  /todo-list:
+    get:
+      summary: Get a list of all Todo Lists
+      operationId: getTodoLists
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TodoList"
+    post:
+      summary: Add a new Todo List
+      operationId: addTodoList
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewTodoListRequestBody"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TodoList"
+  /todo-list/{list_id}/entry:
+    parameters:
+      - in: path
+        name: list_id
+        required: true
+        schema:
+          type: string
+    post:
+      summary: Add an entry to an existing Todo List
+      operationId: addTodoListEntry
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+components:
+  schemas:
+    TodoList:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        list_id:
+          type: string
+      required:
+        - id
+        - name
+        - list_id
+    NewTodoListRequestBody:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        list_id:
+          type: string
+      required:
+        - id
+        - name
+        - list_id
+    UpdateTodoListRequestBody:
+      type: object
+      properties:
+        name:
+          type: string
+      required:
+        - name
+    Message:
+      type: object
+      properties:
+        message:
+          type: string
